@@ -1,47 +1,93 @@
 <?php
 
-/**Clase que nos Permite a conectar a la Base de datos */
+/**PDO Database Class
+ * Permite a conectar a la Base de datos
+ * Crear consultas preparadas
+ * Bind Vincular valores
+ * Retornar filas y resultados
+ **/
 class Database
 {
-    private $dbHost = DB_HOST;
-    private $dbDatabase = DB_DATABASE;
-    private $dbUserName = DB_USERNAME;
-    private $dbPassword = DB_PASSWORD;
 
+    /**Propiedad Singleton*/
+    private static $instance;
+    /**Propiedad Servidor de Base de Datos*/
+    private $host = DB_HOST;
+    /**Propiedad Usuario de Base de Datos*/
+    private $user = DB_USER;
+    /**Propiedad Contraseña de Base de Datos*/
+    private $pass = DB_PASS;
+    /**Propiedad Codificación para conexión Base de Datos*/
+    private $charset = DB_CHARSET;
+    /**Propiedad Base de Datos*/
+    private $dbname = DB_NAME;
+    /**Propiedad Instancia de Conexión de Base de Datos*/
     private $dbh;
+    /**Propiedad Consultas Preparadas de Base de Datos*/
     private $stmt;
+    /**Propiedad Errores en la ejecución*/
     private $error;
-    /**Constructor */
+
     public function __construct()
     {
-        /**Configuramos la Conexion */
-        $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbDatabase;
+        /**Sesteamos el dsn */
+        $dsn = 'mysql:host=' . $this->host . ';charset=' . $this->charset . ';dbname=' . $this->dbname;
+        /**Opciones para la Conexión
+         * ATTR_PERSISTENT conexión persistente, en lugar de crear una nueva conexión.
+         * ATTR_ERRMODE -> ERRMODE_EXCEPTION laza una excepción con un error.
+         * ATTR_DEFAULT_FETCH_MODE-> devuelve un objeto asociativo.active.
+         * ATTR_CASE->CASE_LOWER forzamos los nombres de columnas en minúsculas.
+        */
         $options = array(
             PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_CASE => PDO::CASE_LOWER
         );
-        /**Creamos la Instancia de PDO */
+
+        /**Instancia de la Conexión.
+         * Capturamos el Error.
+        */
         try {
-            $this->dbh = new PDO($dsn, $this->dbUserName, $this->dbPassword, $options);
-            $this->dbh->exec('set names utf8');
+            $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
             echo $this->error;
         }
     }
-    /**Preparamos la Consulta
-     *@param Una query $sql
+
+    /**getInstance
+     * este método singleton devolverá una instancia de la clase.
+     *@param no recibe parámetros
+     *@return instancia de la clase
+     */
+    public static function getInstance()
+    {
+        if (!self::$instance instanceof self){
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
+    /**Consultas Preparadas
+     * 
+     * @param string $sql Query a ejecutar.
+     * @return void
      */
     public function query($sql)
     {
         $this->stmt = $this->dbh->prepare($sql);
     }
-    /**Vinculamos la Consulta con bind
-     * @param Parametro $parameter
-     * @param Valor $value
-     * @param Tipo $type
+
+    /**
+     * Vinculamos los Valores a la query preparada
+     *
+     * @param [string] $param columna a vincular con valor.
+     * @param [string] $value valor a vincular con la columna.
+     * @param [string] $type tipo de valor para validar
+     * @return void
      */
-    public function bind($parameter, $value, $type = null)
+    public function bind($param, $value, $type = null)
     {
         if (is_null($type)) {
             switch (true) {
@@ -59,33 +105,45 @@ class Database
                     break;
             }
         }
-        $this->stmt->bindValue($parameter, $value, $type);
+        $this->stmt->bindValue($param, $value, $type);
     }
-    /**Ejecuta la Consulta
-     * @return stmt execute
+
+    /**
+     * Ejecuta las consultas preparadas
+     *
+     * @return void
      */
     public function execute()
     {
         return $this->stmt->execute();
     }
-    /**Obtener los Registros
-     * @return Multiples Registros
+
+    /**
+     * Ejecuta la consulta preparada para multiples resultados
+     *
+     * @return void
      */
-    public function getAll()
+    public function resultSet()
     {
         $this->execute();
-        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+        return $this->stmt->fetchAll();
     }
-    /**Obtener Registro
-     * @return Un Registro
+
+    /**
+     * Ejecuta la consulta preparada para un solo resultado
+     *
+     * @return void
      */
-    public function getOne()
+    public function single()
     {
         $this->execute();
-        return $this->stmt->fetch(PDO::FETCH_OBJ);
+        return $this->stmt->fetch();
     }
-    /**Obtener la Cantidad de Registros
-     * @return Rows
+
+    /**
+     * Ejecuta la consulta preparada y devuelve el numero de filas
+     *
+     * @return void
      */
     public function rowCount()
     {

@@ -1,8 +1,13 @@
 <?php
-    /**Llamamos al archivo de arranque o puesta en marcha de nuestro 
-     * desde ../app/bootstrap.php
-     */
-    require_once '../app/bootstrap.php';
+/**Requerimos el Archivo de Arranque */
+require_once '../app/bootstrap.php';
+/**Activa los Errores según el Entorno de la Aplicacion. */
+if (APP_ENV !='production') {
+    error_reporting(-1);
+    ini_set('display_errors', 'On');
+}
 
-    /**Intanciamos las Clase Core */
-    $iniciar = new Core();
+/**
+ * Instanciaciamos Nuestra Librería Principal
+ */
+$init = Core::getInstance();

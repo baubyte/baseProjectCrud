@@ -1,35 +1,43 @@
 <?php
-
-/**Controlador Principal
+/**
+ * Controlador Principal
  * Se encarga de cargar las Vistas y Modelos
  */
 class Controller
 {
+  /**
+   * Carga el modelo le pasemos y lo instancia
+   *
+   * @param [string] $model Modelo a Instanciar
+   * @return void
+   */
+  public function model($model)
+  {
+    /**Requerimos el Archivo del Modelo */
+    require_once '../app/models/' . $model . '.php';
 
-    /**Cargar los Modelos
-     * @param Modelo $model
-     * @return Model
-     */
-    public function model($model)
-    {
-        /**Cargamos el Modelo */
-        require_once '../app/models/' . $model . '.php';
-        /**Instanciamos el Modelo */
-        return new $model();
-    }
+    /**Instanciamos el Modelo */
+    return new $model();
+  }
 
-    /**Cargar las Vistas
-     * @param Vista $view
-     * @param Datos array $data
-     */
-    public function view($view, $data = [])
-    {
-        /**Verificamos si el Archivo existe */
-        if (file_exists('../app/views/' . $view . '.php')) {
-            /**Si ecxistes Cargamos la Vista */
-            require_once '../app/views/' . $view . '.php';
-        }else {
-            die('La Vista que Intenta Acceder no Existe.');
-        }
+  /**
+   * Carga la visa que le pasemos y le pase los parámetros que mandemos.
+   *
+   * @param [string] $view Vista a Cargar
+   * @param array $data Daros a mostrar en la vista.
+   * @return void
+   */
+  public function view($view, $data = [])
+  {
+    /**
+     * Comprobamos si el archivo existe, si es asi lo requerimos.
+     * Caso contrario mostramos un error.
+     **/
+    if (file_exists('../app/views/' . $view . '.php')) {
+      require_once('../app/views/' . $view . '.php');
+    } else {
+      /**La Vista no Existe. */
+      die('La Vista No Existe.');
     }
+  }
 }

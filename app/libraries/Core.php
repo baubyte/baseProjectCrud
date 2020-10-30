@@ -1,58 +1,97 @@
 <?php
-
-/**Mapeamos la URL ingresada
- * 1 - Controlador
- * 2 - Método
- * 3 - Parámetros 
- * /article/update/1
- */
+/*
+* Clase principal de la aplicación
+* Crear URL y cargar controlador central
+* FORMATO URL - /controller/method/params
+* Ejemplo /article/update/1
+**/
 class Core
 {
-    protected $defaultController = 'page';
-    protected $defaultMethod = 'index';
-    protected $parameters = [];
+    /**Propiedad Singleton*/
+    private static $instance;
+    /**Propiedad para el Controlador Actual por 
+     * Defecto siempre es Pages
+     **/
+    protected $currentController = 'Pages';
+    /**Propiedad para el Método Actual por 
+     * Defecto siempre es index
+     **/
+    protected $currentMethod = 'index';
+    /**Propiedad para los Parámetros**/
+    protected $params = [];
 
-    /**Constructor */
     public function __construct()
     {
+        /**Obtenemos la URL es un array */
         $url = $this->getUrl();
-        /**Buscamos en controllers si es que el controlador existe */
-        if (file_exists('../app/controllers/' . ucwords($url[0]) . '.php')) {
-            /**Si existe se sestea como el controlador por defecto */
-            $this->defaultController = ucwords($url[0]);
-            /**Eliminamos el elemento del indice 0 */
+        /**Tomamos el primer valor para el Controlador y 
+         * verificamos si existe el archivo.
+         * Ponemos en Mayúscula primer letra de la Palabra
+         **/
+        if (file_exists('../app/controllers/' . ucwords($url[0]) . 'Controller.php')) {
+            /**Si existe seteamos el controlador y blanqueamos 
+             * la primer posición del array $url.
+             **/
+            $this->currentController = ucwords($url[0]);
             unset($url[0]);
         }
 
-        /**Requerimos el controlador */
-        require_once '../app/controllers/' . $this->defaultController . '.php';
-        $this->defaultController = new $this->defaultController;
-        /**Si se seteo el Método desde la url */
+        /**
+         * Requerimos el Controlador y lo Intanciamos.
+         */
+        require_once '../app/controllers/' . $this->currentController . 'Controller.php';
+        $this->currentController =  new $this->currentController;
+
+        /**
+         * Verificamos la segunda parte de la url.
+         * Para ver si estamos pasando un método.
+         */
         if (isset($url[1])) {
-            /**Verificamos el segundo elemento de la url que seria el método */
-            if (method_exists($this->defaultController, $url[1])) {
-                /**Setetamos el Método */
-                $this->defaultMethod = $url[1];
-                /**Eliminamos el elemento del indice 1 */
+            /**Verificamos si el Método existe en la clase.
+             * Si existe o Seteamos.
+             * Blanqueamos la posición del array url.
+             */
+            if (method_exists($this->currentController, $url[1])) {
+                $this->currentMethod = $url[1];
                 unset($url[1]);
             }
         }
-        /**Obtener los Parámetros */
-        $this->parameters = $url ? array_values($url) : [];
-        /**Llamar callback parámetros del array */
-        call_user_func_array([$this->defaultController, $this->defaultMethod], $this->parameters);
-    }
 
-    public function getUrl()
+        /**
+         * Verificamos si el array url tiene valores.
+         * Si tiene seteamos params, sino lo dejamos vacío.
+         */
+        $this->params = $url ? array_values($url) : [];
+
+        /**
+         * Llamamos al metodo con un array de parámetros.
+         */
+        call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
+    }
+    
+    /**getInstance
+     * este método singleton devolverá una instancia de la clase.
+     *@param no recibe parámetros
+     *@return instancia de la clase
+     */
+    public static function getInstance()
     {
-        /**Si la URL esta seteada */
+        if (!self::$instance instanceof self){
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+    /**
+     * Obtiene la url, la limpia y convierte en array. 
+     *
+     * @return array $url con todos los parámetros del la url
+     */
+    public function  getUrl()
+    {
         if (isset($_GET['url'])) {
-            /**Limpiamos los espacios */
             $url = rtrim($_GET['url'], '/');
-            /**Filtro de URL y limpiamos */
             $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
-            /**Retornamos las URL */
             return $url;
         }
     }
