@@ -1,5 +1,5 @@
 <?php
-
+defined('BASEPATH') or exit('No se permite acceso directo');
 /**PDO Database Class
  * Permite a conectar a la Base de datos
  * Crear consultas preparadas

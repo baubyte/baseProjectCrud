@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('No se permite acceso directo');
 /*
 * Clase principal de la aplicación
 * Crear URL y cargar controlador central
@@ -12,7 +13,7 @@ class Core
     /**Propiedad para el Controlador Actual por 
      * Defecto siempre es Pages
      **/
-    protected $currentController = 'Pages';
+    protected $currentController = 'PageController';
     /**Propiedad para el Método Actual por 
      * Defecto siempre es index
      **/
@@ -32,14 +33,14 @@ class Core
             /**Si existe seteamos el controlador y blanqueamos 
              * la primer posición del array $url.
              **/
-            $this->currentController = ucwords($url[0]);
+            $this->currentController = ucwords($url[0]).'Controller';
             unset($url[0]);
         }
 
         /**
          * Requerimos el Controlador y lo Intanciamos.
          */
-        require_once '../app/controllers/' . $this->currentController . 'Controller.php';
+        require_once '../app/controllers/' . $this->currentController.'.php';
         $this->currentController =  new $this->currentController;
 
         /**

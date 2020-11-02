@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('No se permite acceso directo');
     /**Helper para dar formato a la fecha y hora
      *@param Date $date Fecha a Formatear
      *@param Formato $format Formato a dar Opcional

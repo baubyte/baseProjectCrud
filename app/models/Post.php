@@ -1,6 +1,5 @@
 <?php
-
-
+defined('BASEPATH') or exit('No se permite acceso directo');
 class Post
 {
     private $db;

@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('No se permite acceso directo');
 session_start();
 
 /**Flash Mensaje Helper
@@ -67,3 +68,45 @@ function isLoggedIn()
         return false;
     }
 }
+/**
+ * Genera Token para evitar los ateques CSRF
+ *
+ * @return $token 
+ */
+function generateCsrf() {
+    /**Verificamos si hay un token para la sesión actual. sinp lo hay lo generamos,
+     * caso contrario seteamos el valor actual del token en $token.
+    */
+    if(!isset($_SESSION["csrf_token"])) {
+        $token = random_bytes(64);
+        $_SESSION["csrf_token"] = $token;
+    } else {
+        $token = $_SESSION["csrf_token"];
+    }
+    echo "<input type='hidden' name='csrf_token' value='{$token}'>";
+  }
+  /**
+   * Valida el token que pasemos contra la sesion csrf_token
+   * para evitar los ateques con Cross-site request forgery o 
+   * falsificación de petición en sitios cruzados
+   *
+   * @param [string] $token token a validar
+   * @return boolean 
+   */
+  function verifyCsrf()
+  {
+      $token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '' ;
+      $verify = false;
+    /**Si el parametro $token es distinto a la 
+     * sesion csrf_token blankeamos las sesion 
+     **/
+    if (isset($_SESSION["csrf_token"])) {
+        if ($token != $_SESSION["csrf_token"]) {
+            unset($_SESSION["csrf_token"]);
+            $verify = false;
+          }else {
+            $verify = true;
+          }
+    }
+    return $verify;
+  }

@@ -11,11 +11,11 @@
           </li>
           <?php if( isset($_SESSION['user_id'])) : ?>
           <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL_ROOT;?>/users">Usuarios</a>
+              <a class="nav-link" href="<?php echo URL_ROOT;?>/user">Usuarios</a>
           </li>
           <?php endif; ?>
           <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL_ROOT;?>/pages/about">Acerca de</a>
+              <a class="nav-link" href="<?php echo URL_ROOT;?>/page/about">Acerca de</a>
           </li>
       </ul>
       
@@ -27,17 +27,17 @@
                   <i class="fa fa-user"></i> <?php echo $_SESSION['user_name'];?>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="<?php echo URL_ROOT;?>/users/changepassword"><i class="fa fa-key"></i> Cambiar Contraseña</a>
+                  <a class="dropdown-item" href="<?php echo URL_ROOT;?>/user/changepassword"><i class="fa fa-key"></i> Cambiar Contraseña</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?php echo URL_ROOT;?>/users/logout"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
+                  <a class="dropdown-item" href="<?php echo URL_ROOT;?>/user/logout"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
               </div>
           </li>
           <?php else : ?>
           <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL_ROOT;?>/users/login">Iniciar Sesión</a>
+              <a class="nav-link" href="<?php echo URL_ROOT;?>/user/login">Iniciar Sesión</a>
           </li>
           <li class="nav-item">
-             <a class="nav-link" href="<?php echo URL_ROOT;?>/users/register"><i class="fa fa-sign-in"></i>Registrarme</a>
+             <a class="nav-link" href="<?php echo URL_ROOT;?>/user/register"><i class="fa fa-sign-in"></i>Registrarme</a>
           </li>
           <?php endif; ?>
       </ul>
