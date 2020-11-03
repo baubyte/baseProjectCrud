@@ -18,7 +18,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
     /**APP_ROOT Ruta Raíz de la Aplicación */
     define('APP_ROOT', dirname(dirname(__FILE__)));
     /**URL_ROOT URL Raíz de la Aplicación */
-    define('URL_ROOT','http://baseprojectcrud.test:8080');
+    define('URL_ROOT','http://baseprojectcrud.test');
     /**SITE_NAME Nombre de la Aplicación */
     define('SITE_NAME', 'Base Proyecto');
     /**SITE_NAME Version de la Aplicación */
