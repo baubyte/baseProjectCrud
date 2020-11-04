@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
     /**Parámetro de Configuración para la 
-     * conexiona a la Base de datos.
+     * conexión a la Base de datos.
      **/
     /**DB_HOST Servidor de la Base de datos.*/
     define('DB_HOST','localhost');
