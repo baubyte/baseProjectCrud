@@ -1,4 +1,3 @@
-<?php require APP_ROOT . '/views/inc/header.php' ?>
 <a href="<?php echo URL_ROOT; ?>/post" class="btn btn-light"><i class="fa fa-backward"></i> Volver</a>
 <div class="card card-body bg-light mt-5">
    <h3>Editar</h3>
@@ -17,4 +16,3 @@
       <input type="submit" class="btn btn-success" value="Guardar"/>
    </form>
 </div>
-<?php require APP_ROOT . '/views/inc/footer.php' ?>

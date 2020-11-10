@@ -1,4 +1,3 @@
-<?php require APP_ROOT . '/views/inc/header.php' ?>
 <a href="<?php echo URL_ROOT; ?>/post" class="btn btn-light"><i class="fa fa-backward"></i> Volver</a>
 <br/>
 <h1><?php echo $data['post']->title; ?></h1>
@@ -13,4 +12,3 @@ Escrito por <?php echo $data['user']->name ?> el <?php echo helper_format_date($
 <input type="submit" value="Borrar" class="btn btn-danger">
 </form>
 <?php endif; ?>
-<?php require APP_ROOT . '/views/inc/footer.php' ?>

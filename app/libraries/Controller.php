@@ -35,7 +35,9 @@ class Controller
      * Caso contrario mostramos un error.
      **/
     if (file_exists('../app/views/' . $view . '.php')) {
+      require_once('../app/views/inc/header.php');
       require_once('../app/views/' . $view . '.php');
+      require_once('../app/views/inc/footer.php');
     } else {
       /**La Vista no Existe. */
       die('La Vista No Existe.');

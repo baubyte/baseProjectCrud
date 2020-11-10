@@ -1,4 +1,4 @@
-<?php require APP_ROOT . '/views/inc/header.php' ?>
+
 <?php flash('post_message'); ?>
     <div class="row mb-3">
         <div class="col-md-6">
@@ -19,4 +19,3 @@
     </div>
 </div>
 <?php endforeach; ?>
-<?php require APP_ROOT . '/views/inc/footer.php' ?>
