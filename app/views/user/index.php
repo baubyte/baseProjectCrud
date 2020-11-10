@@ -1,4 +1,3 @@
-<?php require APP_ROOT . '/views/inc/header.php' ?>
 <?php flash('user_message'); ?>
 <div class="row mb-3">
     <div class="col-md-6">
@@ -38,4 +37,3 @@
         </div><!-- end div table-responsive -->
     </div>
 </div>
-<?php require APP_ROOT . '/views/inc/footer.php' ?>
